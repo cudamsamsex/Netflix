@@ -42,7 +42,7 @@
             font-size: 16px;
         }
         input { background: #333; color: white; }
-        button { background: red; color: white; cursor: pointer; padding: 10px 20px; }
+        button { background: red; color: white; cursor: pointer; padding: 8px 12px; }
         button:hover { background: darkred; }
         .hidden { display: none; }
         .copy-btn {
@@ -50,7 +50,7 @@
             color: white;
             cursor: pointer;
             margin-left: 5px;
-            padding: 6px 10px;
+            padding: 4px 8px;
             font-size: 14px;
             border-radius: 6px;
             transition: background 0.3s;
@@ -68,7 +68,7 @@
             background: rgba(0, 128, 0, 0.9);
             color: white;
             padding: 12px 18px;
-            border-radius: 12px;
+            border-radius: 10px;
             opacity: 0;
             transition: opacity 0.3s, transform 0.3s;
             transform: translateY(-10px);
@@ -89,14 +89,29 @@
             transition: background 0.3s;
         }
         .lang-switch:hover { background: darkgray; }
+        .password-container {
+            position: relative;
+            display: inline-block;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="lang-switch" onclick="switchLang()">🇬🇧 English</div>
     <div class="login-container" id="login-box">
-        <h2>Login</h2>
+        <h2 id="login-title">Login</h2>
         <input type="text" id="username" placeholder="Username"><br>
-        <input type="password" id="password" placeholder="Password"><br>
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Password">
+            <span class="toggle-password" onclick="togglePassword()">👁️</span>
+        </div>
+        <br>
         <button onclick="login()">Login</button>
         <p id="error" style="color: red; display: none;">Incorrect username or password!</p>
     </div>
@@ -112,30 +127,6 @@
                 <td>demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></td>
                 <td>Password123 <button class="copy-btn" onclick="copyText('Password123')">📋</button></td>
             </tr>
-            <tr>
-                <th>Profile</th>
-                <th>PIN</th>
-            </tr>
-            <tr>
-                <td>Profile 1</td>
-                <td>1234 <button class="copy-btn" onclick="copyText('1234')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 2</td>
-                <td>2345 <button class="copy-btn" onclick="copyText('2345')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 3</td>
-                <td>3456 <button class="copy-btn" onclick="copyText('3456')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 4</td>
-                <td>4567 <button class="copy-btn" onclick="copyText('4567')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 5</td>
-                <td>5678 <button class="copy-btn" onclick="copyText('5678')">📋</button></td>
-            </tr>
         </table>
         <button onclick="logout()">Logout</button>
     </div>
@@ -143,15 +134,14 @@
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        let currentLang = 'en';
         function switchLang() {
             const langSwitch = document.querySelector('.lang-switch');
-            if (currentLang === 'en') {
-                langSwitch.innerHTML = '🇻🇳 Tiếng Việt';
-                currentLang = 'vi';
+            if (langSwitch.textContent.includes('English')) {
+                langSwitch.textContent = '🇻🇳 Tiếng Việt';
+                document.getElementById('login-title').textContent = 'Đăng nhập';
             } else {
-                langSwitch.innerHTML = '🇬🇧 English';
-                currentLang = 'en';
+                langSwitch.textContent = '🇬🇧 English';
+                document.getElementById('login-title').textContent = 'Login';
             }
         }
         
@@ -165,20 +155,24 @@
                 document.getElementById('error').style.display = 'block';
             }
         }
+        
         function logout() {
             localStorage.removeItem('loggedIn');
             document.getElementById('content-box').classList.add('hidden');
             document.getElementById('login-box').classList.remove('hidden');
         }
+        
         function showContent() {
             document.getElementById('login-box').classList.add('hidden');
             document.getElementById('content-box').classList.remove('hidden');
         }
+        
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`Copied: ${text}`);
             });
         }
+        
         function showToast(message) {
             const toastContainer = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -189,6 +183,10 @@
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 500);
             }, 5000);
+        }
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
         }
         if (localStorage.getItem('loggedIn') === 'true') {
             showContent();

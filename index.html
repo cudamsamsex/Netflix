@@ -21,7 +21,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             text-align: center;
-            width: 300px;
+            width: 400px;
         }
         input, button {
             margin: 10px 0;
@@ -45,6 +45,25 @@
         .hidden {
             display: none;
         }
+        .copy-btn {
+            background: #007b00;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .copy-btn:hover {
+            background: #005500;
+        }
+        .toast {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: green;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -58,18 +77,20 @@
     
     <div class="content-container hidden" id="content-box">
         <h2>Chia sẻ tài khoản Netflix</h2>
-        <p><strong>Tài khoản:</strong> demo@example.com</p>
-        <p><strong>Mật khẩu:</strong> password123</p>
+        <p><strong>Tài khoản:</strong> demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></p>
+        <p><strong>Mật khẩu:</strong> password123 <button class="copy-btn" onclick="copyText('password123')">📋</button></p>
         <h3>Hồ sơ:</h3>
         <ul>
-            <li>Hồ sơ 1 - Mật khẩu: 1234</li>
-            <li>Hồ sơ 2 - Mật khẩu: 5678</li>
-            <li>Hồ sơ 3 - Mật khẩu: 91011</li>
-            <li>Hồ sơ 4 - Mật khẩu: 1213</li>
-            <li>Hồ sơ 5 - Mật khẩu: 1415</li>
+            <li>Hồ sơ 1 - Mật khẩu: 1234 <button class="copy-btn" onclick="copyText('1234')">📋</button></li>
+            <li>Hồ sơ 2 - Mật khẩu: 5678 <button class="copy-btn" onclick="copyText('5678')">📋</button></li>
+            <li>Hồ sơ 3 - Mật khẩu: 91011 <button class="copy-btn" onclick="copyText('91011')">📋</button></li>
+            <li>Hồ sơ 4 - Mật khẩu: 1213 <button class="copy-btn" onclick="copyText('1213')">📋</button></li>
+            <li>Hồ sơ 5 - Mật khẩu: 1415 <button class="copy-btn" onclick="copyText('1415')">📋</button></li>
         </ul>
         <button onclick="logout()">Đăng xuất</button>
     </div>
+    
+    <div id="toast" class="toast"></div>
 
     <script>
         function login() {
@@ -92,6 +113,21 @@
         function showContent() {
             document.getElementById('login-box').classList.add('hidden');
             document.getElementById('content-box').classList.remove('hidden');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Đã sao chép: ${text}`);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
         }
 
         window.onload = function() {

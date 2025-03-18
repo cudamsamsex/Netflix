@@ -14,22 +14,24 @@
             background-color: #141414;
             color: white;
             flex-direction: column;
+            position: relative;
         }
         .login-container, .content-container {
             background: #222;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             text-align: center;
         }
-        .login-container { width: 300px; }
-        .content-container { width: 800px; }
+        .login-container { width: 320px; }
+        .content-container { width: 850px; }
         input, button {
             margin: 10px 0;
-            padding: 10px;
+            padding: 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             width: 100%;
+            font-size: 16px;
         }
         input { background: #333; color: white; }
         button { background: red; color: white; cursor: pointer; }
@@ -40,43 +42,55 @@
             color: white;
             cursor: pointer;
             margin-left: 5px;
-            padding: 5px;
-            font-size: 12px;
-            border-radius: 3px;
+            padding: 6px;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: background 0.3s;
         }
         .copy-btn:hover { background: #005500; }
         .toast {
             position: fixed;
-            bottom: 10px;
+            top: 10px;
             right: 10px;
-            background: green;
+            background: rgba(0, 128, 0, 0.9);
             color: white;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 12px 18px;
+            border-radius: 6px;
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: translateY(-20px);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 15px;
             background: black;
+            border-radius: 8px;
+            overflow: hidden;
         }
         th, td {
             border: 1px solid white;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
+            font-size: 16px;
         }
         th { background: green; }
         .lang-switch {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             cursor: pointer;
-            padding: 5px;
+            padding: 8px 12px;
             background: gray;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: background 0.3s;
         }
+        .lang-switch:hover { background: darkgray; }
     </style>
 </head>
 <body>
@@ -127,28 +141,6 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        function login() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            if (user === 'admin' && pass === 'phanhoangna') {
-                localStorage.setItem('loggedIn', 'true');
-                showContent();
-            } else {
-                document.getElementById('error').style.display = 'block';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            document.getElementById('content-box').classList.add('hidden');
-            document.getElementById('login-box').classList.remove('hidden');
-        }
-
-        function showContent() {
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('content-box').classList.remove('hidden');
-        }
-
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`Copied: ${text}`);
@@ -158,28 +150,11 @@
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
-            toast.style.opacity = '1';
+            toast.classList.add('show');
             setTimeout(() => {
-                toast.style.opacity = '0';
+                toast.classList.remove('show');
             }, 2000);
         }
-
-        function switchLang() {
-            const langSwitch = document.querySelector('.lang-switch');
-            const isEnglish = langSwitch.textContent.includes('English');
-            document.getElementById('login-title').textContent = isEnglish ? 'Đăng nhập' : 'Login';
-            document.getElementById('share-title').textContent = isEnglish ? 'Chia sẻ tài khoản Netflix' : 'Netflix Account Share';
-            document.querySelector('button').textContent = isEnglish ? 'Đăng nhập' : 'Login';
-            document.querySelector('.content-container button').textContent = isEnglish ? 'Đăng xuất' : 'Logout';
-            document.getElementById('error').textContent = isEnglish ? 'Sai tài khoản hoặc mật khẩu!' : 'Incorrect username or password!';
-            langSwitch.textContent = isEnglish ? '🇻🇳 Tiếng Việt' : '🇬🇧 English';
-        }
-
-        window.onload = function() {
-            if (localStorage.getItem('loggedIn') === 'true') {
-                showContent();
-            }
-        };
     </script>
 </body>
 </html>

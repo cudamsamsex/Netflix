@@ -23,14 +23,19 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             text-align: center;
         }
-        .login-container { width: 320px; }
+        .login-container {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .content-container { width: 850px; }
         input, button {
             margin: 10px 0;
             padding: 12px;
             border: none;
             border-radius: 6px;
-            width: 100%;
+            width: 90%;
             font-size: 16px;
         }
         input { background: #333; color: white; }
@@ -141,6 +146,28 @@
     <div id="toast" class="toast"></div>
 
     <script>
+        function login() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            if (user === 'admin' && pass === 'phanhoangna') {
+                localStorage.setItem('loggedIn', 'true');
+                showContent();
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            document.getElementById('content-box').classList.add('hidden');
+            document.getElementById('login-box').classList.remove('hidden');
+        }
+
+        function showContent() {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('content-box').classList.remove('hidden');
+        }
+
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`Copied: ${text}`);
@@ -155,6 +182,12 @@
                 toast.classList.remove('show');
             }, 2000);
         }
+
+        window.onload = function() {
+            if (localStorage.getItem('loggedIn') === 'true') {
+                showContent();
+            }
+        };
     </script>
 </body>
 </html>

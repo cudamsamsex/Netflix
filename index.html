@@ -15,22 +15,15 @@
             color: white;
             flex-direction: column;
         }
-        .login-container {
+        .login-container, .content-container {
             background: #222;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             text-align: center;
-            width: 300px;
         }
-        .content-container {
-            background: #222;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            width: 800px;
-        }
+        .login-container { width: 300px; }
+        .content-container { width: 800px; }
         input, button {
             margin: 10px 0;
             padding: 10px;
@@ -38,21 +31,10 @@
             border-radius: 4px;
             width: 100%;
         }
-        input {
-            background: #333;
-            color: white;
-        }
-        button {
-            background: red;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background: darkred;
-        }
-        .hidden {
-            display: none;
-        }
+        input { background: #333; color: white; }
+        button { background: red; color: white; cursor: pointer; }
+        button:hover { background: darkred; }
+        .hidden { display: none; }
         .copy-btn {
             background: #007b00;
             color: white;
@@ -62,18 +44,17 @@
             font-size: 12px;
             border-radius: 3px;
         }
-        .copy-btn:hover {
-            background: #005500;
-        }
+        .copy-btn:hover { background: #005500; }
         .toast {
             position: fixed;
-            top: 10px;
+            bottom: 10px;
             right: 10px;
             background: green;
             color: white;
             padding: 10px;
             border-radius: 5px;
-            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
         }
         table {
             width: 100%;
@@ -86,53 +67,61 @@
             padding: 10px;
             text-align: center;
         }
-        th {
-            background: green;
+        th { background: green; }
+        .lang-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            padding: 5px;
+            background: gray;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
+    <div class="lang-switch" onclick="switchLang()">🇬🇧 English</div>
     <div class="login-container" id="login-box">
-        <h2>Đăng nhập</h2>
+        <h2 id="login-title">Login</h2>
         <input type="text" id="username" placeholder="Username"><br>
         <input type="password" id="password" placeholder="Password"><br>
-        <button onclick="login()">Đăng nhập</button>
-        <p id="error" style="color: red; display: none;">Sai tài khoản hoặc mật khẩu!</p>
+        <button onclick="login()">Login</button>
+        <p id="error" style="color: red; display: none;">Incorrect username or password!</p>
     </div>
     
     <div class="content-container hidden" id="content-box">
-        <h2>Chia sẻ tài khoản Netflix</h2>
+        <h2 id="share-title">Netflix Account Share</h2>
         <table>
             <tr>
-                <th>Tài Khoản</th>
-                <th>Mật Khẩu</th>
+                <th>Account</th>
+                <th>Password</th>
             </tr>
             <tr>
                 <td>demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></td>
                 <td>Password123 <button class="copy-btn" onclick="copyText('Password123')">📋</button></td>
             </tr>
             <tr>
-                <td>Hồ Sơ 1</td>
+                <td>Profile 1</td>
                 <td>1234 <button class="copy-btn" onclick="copyText('1234')">📋</button></td>
             </tr>
             <tr>
-                <td>Hồ Sơ 2</td>
+                <td>Profile 2</td>
                 <td>2345 <button class="copy-btn" onclick="copyText('2345')">📋</button></td>
             </tr>
             <tr>
-                <td>Hồ Sơ 3</td>
+                <td>Profile 3</td>
                 <td>4567 <button class="copy-btn" onclick="copyText('4567')">📋</button></td>
             </tr>
             <tr>
-                <td>Hồ Sơ 4</td>
+                <td>Profile 4</td>
                 <td>6789 <button class="copy-btn" onclick="copyText('6789')">📋</button></td>
             </tr>
             <tr>
-                <td>Hồ Sơ 5</td>
+                <td>Profile 5</td>
                 <td>7890 <button class="copy-btn" onclick="copyText('7890')">📋</button></td>
             </tr>
         </table>
-        <button onclick="logout()">Đăng xuất</button>
+        <button onclick="logout()">Logout</button>
     </div>
     
     <div id="toast" class="toast"></div>
@@ -162,17 +151,28 @@
 
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
-                showToast(`Đã sao chép: ${text}`);
+                showToast(`Copied: ${text}`);
             });
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
-            toast.style.display = 'block';
+            toast.style.opacity = '1';
             setTimeout(() => {
-                toast.style.display = 'none';
+                toast.style.opacity = '0';
             }, 2000);
+        }
+
+        function switchLang() {
+            const langSwitch = document.querySelector('.lang-switch');
+            const isEnglish = langSwitch.textContent.includes('English');
+            document.getElementById('login-title').textContent = isEnglish ? 'Đăng nhập' : 'Login';
+            document.getElementById('share-title').textContent = isEnglish ? 'Chia sẻ tài khoản Netflix' : 'Netflix Account Share';
+            document.querySelector('button').textContent = isEnglish ? 'Đăng nhập' : 'Login';
+            document.querySelector('.content-container button').textContent = isEnglish ? 'Đăng xuất' : 'Logout';
+            document.getElementById('error').textContent = isEnglish ? 'Sai tài khoản hoặc mật khẩu!' : 'Incorrect username or password!';
+            langSwitch.textContent = isEnglish ? '🇻🇳 Tiếng Việt' : '🇬🇧 English';
         }
 
         window.onload = function() {

@@ -29,21 +29,10 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            border: 1px solid #333;
-            border-radius: 8px;
         }
         th, td {
             padding: 15px;
             text-align: center;
-            border-bottom: 1px solid #444;
-        }
-        th {
-            background-color: #555;
-            font-size: 18px;
-        }
-        td {
-            background-color: #333;
-            font-size: 16px;
         }
         input, button {
             margin: 10px 0;
@@ -53,7 +42,7 @@
             font-size: 16px;
         }
         input { background: #333; color: white; }
-        button { background: red; color: white; cursor: pointer; padding: 8px 12px; }
+        button { background: red; color: white; cursor: pointer; padding: 10px 20px; }
         button:hover { background: darkred; }
         .hidden { display: none; }
         .copy-btn {
@@ -61,7 +50,7 @@
             color: white;
             cursor: pointer;
             margin-left: 5px;
-            padding: 4px 8px;
+            padding: 6px 10px;
             font-size: 14px;
             border-radius: 6px;
             transition: background 0.3s;
@@ -79,7 +68,7 @@
             background: rgba(0, 128, 0, 0.9);
             color: white;
             padding: 12px 18px;
-            border-radius: 10px;
+            border-radius: 12px;
             opacity: 0;
             transition: opacity 0.3s, transform 0.3s;
             transform: translateY(-10px);
@@ -100,35 +89,20 @@
             transition: background 0.3s;
         }
         .lang-switch:hover { background: darkgray; }
-        .password-container {
-            position: relative;
-            display: inline-block;
-        }
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
     <div class="lang-switch" onclick="switchLang()">🇬🇧 English</div>
     <div class="login-container" id="login-box">
-        <h2 id="login-title">Login</h2>
+        <h2>Login</h2>
         <input type="text" id="username" placeholder="Username"><br>
-        <div class="password-container">
-            <input type="password" id="password" placeholder="Password">
-            <span class="toggle-password" onclick="togglePassword()">👁️</span>
-        </div>
-        <br>
+        <input type="password" id="password" placeholder="Password"><br>
         <button onclick="login()">Login</button>
         <p id="error" style="color: red; display: none;">Incorrect username or password!</p>
     </div>
     
     <div class="content-container hidden" id="content-box">
-        <h2 id="account-title">Netflix Account Share</h2>
+        <h2>Netflix Account Share</h2>
         <table>
             <tr>
                 <th>Account</th>
@@ -139,20 +113,28 @@
                 <td>Password123 <button class="copy-btn" onclick="copyText('Password123')">📋</button></td>
             </tr>
             <tr>
-                <td>user1@example.com <button class="copy-btn" onclick="copyText('user1@example.com')">📋</button></td>
-                <td>Password456 <button class="copy-btn" onclick="copyText('Password456')">📋</button></td>
+                <th>Profile</th>
+                <th>PIN</th>
             </tr>
             <tr>
-                <td>user2@example.com <button class="copy-btn" onclick="copyText('user2@example.com')">📋</button></td>
-                <td>Password789 <button class="copy-btn" onclick="copyText('Password789')">📋</button></td>
+                <td>Profile 1</td>
+                <td>1234 <button class="copy-btn" onclick="copyText('1234')">📋</button></td>
             </tr>
             <tr>
-                <td>user3@example.com <button class="copy-btn" onclick="copyText('user3@example.com')">📋</button></td>
-                <td>Password101 <button class="copy-btn" onclick="copyText('Password101')">📋</button></td>
+                <td>Profile 2</td>
+                <td>2345 <button class="copy-btn" onclick="copyText('2345')">📋</button></td>
             </tr>
             <tr>
-                <td>user4@example.com <button class="copy-btn" onclick="copyText('user4@example.com')">📋</button></td>
-                <td>Password202 <button class="copy-btn" onclick="copyText('Password202')">📋</button></td>
+                <td>Profile 3</td>
+                <td>3456 <button class="copy-btn" onclick="copyText('3456')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Profile 4</td>
+                <td>4567 <button class="copy-btn" onclick="copyText('4567')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Profile 5</td>
+                <td>5678 <button class="copy-btn" onclick="copyText('5678')">📋</button></td>
             </tr>
         </table>
         <button onclick="logout()">Logout</button>
@@ -161,26 +143,56 @@
     <div class="toast-container" id="toast-container"></div>
 
     <script>
+        let currentLang = 'en';
         function switchLang() {
             const langSwitch = document.querySelector('.lang-switch');
-            const loginTitle = document.getElementById('login-title');
-            const accountTitle = document.getElementById('account-title');
-            
-            if (langSwitch.textContent.includes('English')) {
-                langSwitch.textContent = '🇻🇳 Tiếng Việt';
-                loginTitle.textContent = 'Đăng nhập';
-                accountTitle.textContent = 'Chia sẻ tài khoản Netflix';
-                document.getElementById('error').textContent = 'Sai tên người dùng hoặc mật khẩu!';
+            if (currentLang === 'en') {
+                langSwitch.innerHTML = '🇻🇳 Tiếng Việt';
+                currentLang = 'vi';
             } else {
-                langSwitch.textContent = '🇬🇧 English';
-                loginTitle.textContent = 'Login';
-                accountTitle.textContent = 'Netflix Account Share';
-                document.getElementById('error').textContent = 'Incorrect username or password!';
+                langSwitch.innerHTML = '🇬🇧 English';
+                currentLang = 'en';
             }
         }
-
-        // Lưu username vào localStorage
+        
         function login() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
-            if
+            if (user === 'admin' && pass === 'phanhoangna') {
+                localStorage.setItem('loggedIn', 'true');
+                showContent();
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            document.getElementById('content-box').classList.add('hidden');
+            document.getElementById('login-box').classList.remove('hidden');
+        }
+        function showContent() {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('content-box').classList.remove('hidden');
+        }
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Copied: ${text}`);
+            });
+        }
+        function showToast(message) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast show';
+            toast.textContent = message;
+            toastContainer.prepend(toast);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
+        }
+        if (localStorage.getItem('loggedIn') === 'true') {
+            showContent();
+        }
+    </script>
+</body>
+</html>

@@ -15,13 +15,21 @@
             color: white;
             flex-direction: column;
         }
-        .login-container, .content-container {
+        .login-container {
+            background: #222;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        .content-container {
             background: #222;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             text-align: center;
-            width: 600px;
+            width: 800px;
         }
         input, button {
             margin: 10px 0;
@@ -49,7 +57,10 @@
             background: #007b00;
             color: white;
             cursor: pointer;
-            margin-left: 10px;
+            margin-left: 5px;
+            padding: 5px;
+            font-size: 12px;
+            border-radius: 3px;
         }
         .copy-btn:hover {
             background: #005500;
@@ -68,6 +79,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            background: black;
         }
         th, td {
             border: 1px solid white;
@@ -94,12 +106,10 @@
             <tr>
                 <th>Tài Khoản</th>
                 <th>Mật Khẩu</th>
-                <th>Thời Gian Sử Dụng</th>
             </tr>
             <tr>
                 <td>demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></td>
                 <td>Password123 <button class="copy-btn" onclick="copyText('Password123')">📋</button></td>
-                <td rowspan="6">Life Time</td>
             </tr>
             <tr>
                 <td>Hồ Sơ 1</td>

@@ -47,16 +47,16 @@
         button:hover { background: darkred; }
         .hidden { display: none; }
         .copy-btn {
-            background: #007b00;
+            background: #008000;
             color: white;
             cursor: pointer;
             margin-left: 5px;
-            padding: 6px;
+            padding: 8px 10px;
             font-size: 14px;
-            border-radius: 4px;
-            transition: background 0.3s;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
         }
-        .copy-btn:hover { background: #005500; }
+        .copy-btn:hover { background: #005500; transform: scale(1.1); }
         .toast-container {
             position: fixed;
             top: 20px;
@@ -66,13 +66,14 @@
             gap: 10px;
         }
         .toast {
-            background: rgba(0, 128, 0, 0.9);
+            background: rgba(0, 200, 0, 0.9);
             color: white;
-            padding: 12px 18px;
-            border-radius: 6px;
+            padding: 14px 20px;
+            border-radius: 10px;
             opacity: 0;
             transition: opacity 0.3s, transform 0.3s;
             transform: translateY(-10px);
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
         }
         .toast.show {
             opacity: 1;
@@ -124,18 +125,6 @@
             <tr>
                 <td>Profile 2</td>
                 <td>2345 <button class="copy-btn" onclick="copyText('2345')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 3</td>
-                <td>3456 <button class="copy-btn" onclick="copyText('3456')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 4</td>
-                <td>4567 <button class="copy-btn" onclick="copyText('4567')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 5</td>
-                <td>5678 <button class="copy-btn" onclick="copyText('5678')">📋</button></td>
             </tr>
         </table>
         <button onclick="logout()">Logout</button>

@@ -29,10 +29,21 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
         }
         th, td {
             padding: 15px;
             text-align: center;
+            border-bottom: 1px solid #444;
+        }
+        th {
+            background-color: #555;
+            font-size: 18px;
+        }
+        td {
+            background-color: #333;
+            font-size: 16px;
         }
         input, button {
             margin: 10px 0;
@@ -135,6 +146,14 @@
                 <td>user2@example.com <button class="copy-btn" onclick="copyText('user2@example.com')">📋</button></td>
                 <td>Password789 <button class="copy-btn" onclick="copyText('Password789')">📋</button></td>
             </tr>
+            <tr>
+                <td>user3@example.com <button class="copy-btn" onclick="copyText('user3@example.com')">📋</button></td>
+                <td>Password101 <button class="copy-btn" onclick="copyText('Password101')">📋</button></td>
+            </tr>
+            <tr>
+                <td>user4@example.com <button class="copy-btn" onclick="copyText('user4@example.com')">📋</button></td>
+                <td>Password202 <button class="copy-btn" onclick="copyText('Password202')">📋</button></td>
+            </tr>
         </table>
         <button onclick="logout()">Logout</button>
     </div>
@@ -164,60 +183,4 @@
         function login() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
-            if (user === 'admin' && pass === 'phanhoangna') {
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('username', user); // Lưu username
-                showContent();
-            } else {
-                document.getElementById('error').style.display = 'block';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('username'); // Xóa username
-            document.getElementById('content-box').classList.add('hidden');
-            document.getElementById('login-box').classList.remove('hidden');
-        }
-        
-        function showContent() {
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('content-box').classList.remove('hidden');
-        }
-
-        // Lấy username đã lưu trong localStorage và điền vào ô username
-        window.onload = () => {
-            const savedUsername = localStorage.getItem('username');
-            if (savedUsername) {
-                document.getElementById('username').value = savedUsername;
-            }
-            if (localStorage.getItem('loggedIn') === 'true') {
-                showContent();
-            }
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(`Copied: ${text}`);
-            });
-        }
-
-        function showToast(message) {
-            const toastContainer = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast show';
-            toast.textContent = message;
-            toastContainer.prepend(toast);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 500);
-            }, 5000);
-        }
-
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-        }
-    </script>
-</body>
-</html>
+            if

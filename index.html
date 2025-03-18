@@ -21,7 +21,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             text-align: center;
-            width: 400px;
+            width: 600px;
         }
         input, button {
             margin: 10px 0;
@@ -64,6 +64,19 @@
             border-radius: 5px;
             display: none;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid white;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: green;
+        }
     </style>
 </head>
 <body>
@@ -77,16 +90,38 @@
     
     <div class="content-container hidden" id="content-box">
         <h2>Chia sẻ tài khoản Netflix</h2>
-        <p><strong>Tài khoản:</strong> demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></p>
-        <p><strong>Mật khẩu:</strong> password123 <button class="copy-btn" onclick="copyText('password123')">📋</button></p>
-        <h3>Hồ sơ:</h3>
-        <ul>
-            <li>Hồ sơ 1 - Mật khẩu: 1234 <button class="copy-btn" onclick="copyText('1234')">📋</button></li>
-            <li>Hồ sơ 2 - Mật khẩu: 5678 <button class="copy-btn" onclick="copyText('5678')">📋</button></li>
-            <li>Hồ sơ 3 - Mật khẩu: 91011 <button class="copy-btn" onclick="copyText('91011')">📋</button></li>
-            <li>Hồ sơ 4 - Mật khẩu: 1213 <button class="copy-btn" onclick="copyText('1213')">📋</button></li>
-            <li>Hồ sơ 5 - Mật khẩu: 1415 <button class="copy-btn" onclick="copyText('1415')">📋</button></li>
-        </ul>
+        <table>
+            <tr>
+                <th>Tài Khoản</th>
+                <th>Mật Khẩu</th>
+                <th>Thời Gian Sử Dụng</th>
+            </tr>
+            <tr>
+                <td>demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></td>
+                <td>Password123 <button class="copy-btn" onclick="copyText('Password123')">📋</button></td>
+                <td rowspan="6">Life Time</td>
+            </tr>
+            <tr>
+                <td>Hồ Sơ 1</td>
+                <td>1234 <button class="copy-btn" onclick="copyText('1234')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Hồ Sơ 2</td>
+                <td>2345 <button class="copy-btn" onclick="copyText('2345')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Hồ Sơ 3</td>
+                <td>4567 <button class="copy-btn" onclick="copyText('4567')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Hồ Sơ 4</td>
+                <td>6789 <button class="copy-btn" onclick="copyText('6789')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Hồ Sơ 5</td>
+                <td>7890 <button class="copy-btn" onclick="copyText('7890')">📋</button></td>
+            </tr>
+        </table>
         <button onclick="logout()">Đăng xuất</button>
     </div>
     

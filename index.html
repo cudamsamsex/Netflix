@@ -117,7 +117,7 @@
     </div>
     
     <div class="content-container hidden" id="content-box">
-        <h2>Netflix Account Share</h2>
+        <h2 id="account-title">Netflix Account Share</h2>
         <table>
             <tr>
                 <th>Account</th>
@@ -126,6 +126,14 @@
             <tr>
                 <td>demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></td>
                 <td>Password123 <button class="copy-btn" onclick="copyText('Password123')">📋</button></td>
+            </tr>
+            <tr>
+                <td>user1@example.com <button class="copy-btn" onclick="copyText('user1@example.com')">📋</button></td>
+                <td>Password456 <button class="copy-btn" onclick="copyText('Password456')">📋</button></td>
+            </tr>
+            <tr>
+                <td>user2@example.com <button class="copy-btn" onclick="copyText('user2@example.com')">📋</button></td>
+                <td>Password789 <button class="copy-btn" onclick="copyText('Password789')">📋</button></td>
             </tr>
         </table>
         <button onclick="logout()">Logout</button>
@@ -136,28 +144,38 @@
     <script>
         function switchLang() {
             const langSwitch = document.querySelector('.lang-switch');
+            const loginTitle = document.getElementById('login-title');
+            const accountTitle = document.getElementById('account-title');
+            
             if (langSwitch.textContent.includes('English')) {
                 langSwitch.textContent = '🇻🇳 Tiếng Việt';
-                document.getElementById('login-title').textContent = 'Đăng nhập';
+                loginTitle.textContent = 'Đăng nhập';
+                accountTitle.textContent = 'Chia sẻ tài khoản Netflix';
+                document.getElementById('error').textContent = 'Sai tên người dùng hoặc mật khẩu!';
             } else {
                 langSwitch.textContent = '🇬🇧 English';
-                document.getElementById('login-title').textContent = 'Login';
+                loginTitle.textContent = 'Login';
+                accountTitle.textContent = 'Netflix Account Share';
+                document.getElementById('error').textContent = 'Incorrect username or password!';
             }
         }
-        
+
+        // Lưu username vào localStorage
         function login() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
             if (user === 'admin' && pass === 'phanhoangna') {
                 localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('username', user); // Lưu username
                 showContent();
             } else {
                 document.getElementById('error').style.display = 'block';
             }
         }
-        
+
         function logout() {
             localStorage.removeItem('loggedIn');
+            localStorage.removeItem('username'); // Xóa username
             document.getElementById('content-box').classList.add('hidden');
             document.getElementById('login-box').classList.remove('hidden');
         }
@@ -166,13 +184,24 @@
             document.getElementById('login-box').classList.add('hidden');
             document.getElementById('content-box').classList.remove('hidden');
         }
-        
+
+        // Lấy username đã lưu trong localStorage và điền vào ô username
+        window.onload = () => {
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                document.getElementById('username').value = savedUsername;
+            }
+            if (localStorage.getItem('loggedIn') === 'true') {
+                showContent();
+            }
+        }
+
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`Copied: ${text}`);
             });
         }
-        
+
         function showToast(message) {
             const toastContainer = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -184,12 +213,10 @@
                 setTimeout(() => toast.remove(), 500);
             }, 5000);
         }
+
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-        }
-        if (localStorage.getItem('loggedIn') === 'true') {
-            showContent();
         }
     </script>
 </body>

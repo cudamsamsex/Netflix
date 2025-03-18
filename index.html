@@ -14,6 +14,7 @@
             background-color: #141414;
             color: white;
             flex-direction: column;
+            position: relative;
         }
         .login-container, .content-container {
             background: #222;
@@ -49,33 +50,36 @@
         .copy-btn:hover { background: #005500; }
         .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            top: 20px;
+            right: 100px;
             background: rgba(0, 128, 0, 0.9);
             color: white;
             padding: 12px 18px;
             border-radius: 6px;
             opacity: 0;
             transition: opacity 0.5s, transform 0.5s;
-            transform: translateY(20px);
+            transform: translateY(-20px);
         }
         .toast.show {
             opacity: 1;
             transform: translateY(0);
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .lang-switch {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: gray;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: background 0.3s;
         }
-        th, td {
-            border: 1px solid #555;
-            padding: 10px;
-            text-align: center;
-        }
+        .lang-switch:hover { background: darkgray; }
     </style>
 </head>
 <body>
+    <div class="lang-switch" onclick="switchLang()">🇬🇧 English</div>
     <div class="login-container" id="login-box">
         <h2>Login</h2>
         <input type="text" id="username" placeholder="Username"><br>
@@ -126,45 +130,8 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        function login() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            if (user === 'admin' && pass === 'phanhoangna') {
-                localStorage.setItem('loggedIn', 'true');
-                showContent();
-            } else {
-                document.getElementById('error').style.display = 'block';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            document.getElementById('content-box').classList.add('hidden');
-            document.getElementById('login-box').classList.remove('hidden');
-        }
-
-        function showContent() {
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('content-box').classList.remove('hidden');
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(`Copied: ${text}`);
-            }).catch(err => {
-                console.error('Copy failed', err);
-            });
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 2000);
-        }
-
-        if (localStorage.getItem('loggedIn') === 'true') {
-            showContent();
+        function switchLang() {
+            alert("Language switching feature is under development!");
         }
     </script>
 </body>

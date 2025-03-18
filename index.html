@@ -22,13 +22,12 @@
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-        .login-container {
-            width: 320px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .login-container { width: 320px; }
         .content-container { width: 850px; }
         input, button {
             margin: 10px 0;
@@ -55,37 +54,22 @@
         .copy-btn:hover { background: #005500; }
         .toast {
             position: fixed;
-            top: 10px;
-            right: 10px;
+            bottom: 50px;
+            right: 15px;
             background: rgba(0, 128, 0, 0.9);
             color: white;
             padding: 12px 18px;
             border-radius: 6px;
             opacity: 0;
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-            transform: translateY(-20px);
+            transform: translateY(20px);
         }
         .toast.show {
             opacity: 1;
             transform: translateY(0);
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: black;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        th, td {
-            border: 1px solid white;
-            padding: 12px;
-            text-align: center;
-            font-size: 16px;
-        }
-        th { background: green; }
         .lang-switch {
-            position: absolute;
+            position: fixed;
             top: 15px;
             right: 15px;
             cursor: pointer;
@@ -118,6 +102,30 @@
             <tr>
                 <td>demo@example.com <button class="copy-btn" onclick="copyText('demo@example.com')">📋</button></td>
                 <td>Password123 <button class="copy-btn" onclick="copyText('Password123')">📋</button></td>
+            </tr>
+            <tr>
+                <th>Profile</th>
+                <th>PIN</th>
+            </tr>
+            <tr>
+                <td>Profile 1</td>
+                <td>1234 <button class="copy-btn" onclick="copyText('1234')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Profile 2</td>
+                <td>2345 <button class="copy-btn" onclick="copyText('2345')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Profile 3</td>
+                <td>4567 <button class="copy-btn" onclick="copyText('4567')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Profile 4</td>
+                <td>6789 <button class="copy-btn" onclick="copyText('6789')">📋</button></td>
+            </tr>
+            <tr>
+                <td>Profile 5</td>
+                <td>7890 <button class="copy-btn" onclick="copyText('7890')">📋</button></td>
             </tr>
         </table>
         <button onclick="logout()">Logout</button>
@@ -153,36 +161,6 @@
                 showToast(`Copied: ${text}`);
             });
         }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
-        }
-
-        function switchLang() {
-            let langSwitch = document.querySelector('.lang-switch');
-            let loginTitle = document.getElementById('login-title');
-            let shareTitle = document.getElementById('share-title');
-            if (langSwitch.textContent.includes('English')) {
-                langSwitch.textContent = '🇻🇳 Tiếng Việt';
-                loginTitle.textContent = 'Đăng nhập';
-                shareTitle.textContent = 'Chia sẻ tài khoản Netflix';
-            } else {
-                langSwitch.textContent = '🇬🇧 English';
-                loginTitle.textContent = 'Login';
-                shareTitle.textContent = 'Netflix Account Share';
-            }
-        }
-
-        window.onload = function() {
-            if (localStorage.getItem('loggedIn') === 'true') {
-                showContent();
-            }
-        };
     </script>
 </body>
 </html>

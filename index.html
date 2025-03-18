@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Account Share</title>
     <style>
-        /* Thiết lập giao diện tổng thể */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -17,7 +16,6 @@
             flex-direction: column;
             position: relative;
         }
-        /* Hộp đăng nhập và nội dung chính */
         .login-container, .content-container {
             background: #222;
             padding: 20px;
@@ -27,7 +25,6 @@
         }
         .login-container { width: 320px; }
         .content-container { width: 850px; padding: 30px; }
-        /* Bảng hiển thị thông tin tài khoản */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -37,7 +34,6 @@
             padding: 15px;
             text-align: center;
         }
-        /* Ô nhập và nút bấm */
         input, button {
             margin: 10px 0;
             padding: 12px;
@@ -50,7 +46,6 @@
         button { background: red; color: white; cursor: pointer; }
         button:hover { background: darkred; }
         .hidden { display: none; }
-        /* Nút sao chép */
         .copy-btn {
             background: #007b00;
             color: white;
@@ -62,24 +57,22 @@
             transition: background 0.3s;
         }
         .copy-btn:hover { background: #005500; }
-        /* Popup thông báo sao chép */
-        .toast {
+        .toast-container {
             position: fixed;
             top: 20px;
             right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
             background: rgba(0, 128, 0, 0.9);
             color: white;
             padding: 12px 18px;
             border-radius: 6px;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            transform: translateY(-10px);
-        }
-        .toast.show {
             opacity: 1;
-            transform: translateY(0);
+            transition: transform 0.3s, opacity 0.3s;
         }
-        /* Nút chuyển đổi ngôn ngữ */
         .lang-switch {
             position: fixed;
             top: 15px;
@@ -143,52 +136,26 @@
         <button onclick="logout()">Logout</button>
     </div>
     
-    <div id="toast" class="toast"></div>
+    <div class="toast-container" id="toast-container"></div>
 
     <script>
-        function switchLang() {
-            alert("Language switching feature is under development!");
-        }
-        
-        function login() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            if (user === 'admin' && pass === 'phanhoangna') {
-                localStorage.setItem('loggedIn', 'true');
-                showContent();
-            } else {
-                document.getElementById('error').style.display = 'block';
-            }
-        }
-        
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            document.getElementById('content-box').classList.add('hidden');
-            document.getElementById('login-box').classList.remove('hidden');
-        }
-        
-        function showContent() {
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('content-box').classList.remove('hidden');
-        }
-        
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`Copied: ${text}`);
             });
         }
-        
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
 
-        if (localStorage.getItem('loggedIn') === 'true') {
-            showContent();
+        function showToast(message) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.classList.add('toast');
+            toast.textContent = message;
+            toastContainer.prepend(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
         }
     </script>
 </body>

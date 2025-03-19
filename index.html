@@ -5,59 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Account Share</title>
     <style>
+        /* Your existing styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
+            background: url('https://i.imgur.com/7syXYAp.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #141414;
             color: white;
-            flex-direction: column;
-            position: relative;
+            overflow: hidden;
+            transition: background 0.5s ease;
         }
+
         .login-container, .content-container {
-            background: #222;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
             text-align: center;
+            color: white;
+            transform: translateY(-50px);
+            animation: slideIn 1s forwards;
         }
-        .login-container { width: 320px; }
-        .content-container { width: 850px; padding: 30px; }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+
+        .login-container { 
+            width: 400px;
+            backdrop-filter: blur(5px);
         }
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border: 1px solid white;
+
+        .content-container {
+            width: 850px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
+
+        .user-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .user-image:hover {
+            transform: scale(1.1);
+        }
+
+        h2 {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #ff7f50;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
         input, button {
             margin: 10px 0;
-            padding: 12px;
+            padding: 15px;
             border: none;
-            border-radius: 6px;
-            width: 90%;
+            border-radius: 10px;
+            width: 80%;
             font-size: 16px;
+            transition: background-color 0.3s;
         }
-        input { background: #333; color: white; }
-        button { background: red; color: white; cursor: pointer; }
-        button:hover { background: darkred; }
-        .hidden { display: none; }
-        .copy-btn {
-            background: #007bff;
+
+        input {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid #ff7f50;
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            background: #ff7f50;
             color: white;
             cursor: pointer;
-            margin-left: 5px;
-            padding: 6px;
-            font-size: 14px;
-            border-radius: 8px;
-            transition: background 0.3s;
+            border: 2px solid #ff7f50;
+            font-weight: bold;
         }
-        .copy-btn:hover { background: #0056b3; }
+
+        button:hover {
+            background: #ff6347;
+            border-color: #ff6347;
+        }
+
         .toast-container {
             position: fixed;
             top: 20px;
@@ -66,42 +106,73 @@
             flex-direction: column;
             gap: 10px;
         }
+
         .toast {
-            background: rgba(0, 128, 255, 0.9);
+            background: rgba(255, 99, 71, 0.9);
             color: white;
-            padding: 14px 20px;
+            padding: 12px 18px;
             border-radius: 12px;
             opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
             transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
         }
+
         .toast.show {
             opacity: 1;
             transform: translateY(0);
         }
-        .lang-switch {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            cursor: pointer;
-            padding: 8px 12px;
-            background: gray;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: background 0.3s;
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
-        .lang-switch:hover { background: darkgray; }
+
+        /* Ẩn phần content khi chưa đăng nhập */
+        .hidden {
+            display: none;
+        }
+
+        /* Resize the logout button */
+        .logout-button {
+            padding: 10px 20px;
+            font-size: 14px;
+            width: auto;
+            cursor: pointer;
+        }
+
+        /* Style for the eye icon */
+        .eye-icon {
+            cursor: pointer;
+            position: absolute;
+            right: 35px;  /* Adjusted right position to avoid overlapping */
+            top: 50%;  /* Vertically center the icon */
+            transform: translateY(-50%);  /* Fine-tune centering */
+            color: white;
+        }
     </style>
 </head>
 <body>
+    <!-- Khung đăng nhập -->
     <div class="login-container" id="login-box">
-        <h2>Login</h2>
+        <img src="https://i.pinimg.com/originals/d2/a8/47/d2a84760f77dfe1ab7903615f4523a71.gif" alt="User Avatar" class="user-image"> <!-- Ảnh người dùng -->
+        <h2>Login Account:
+        </h2>
         <input type="text" id="username" placeholder="Username"><br>
-        <input type="password" id="password" placeholder="Password"><br>
+        <div style="position: relative;">
+            <input type="password" id="password" placeholder="Password"><br>
+            <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
+        </div>
         <button onclick="login()">Login</button>
         <p id="error" style="color: red; display: none;">Incorrect username or password!</p>
     </div>
     
+    <!-- Nội dung Netflix Account Share, sẽ ẩn cho đến khi đăng nhập -->
     <div class="content-container hidden" id="content-box">
         <h2>Netflix Account Share</h2>
         <table>
@@ -138,16 +209,35 @@
                 <td>0055 <button class="copy-btn" onclick="copyText('0055')">📋</button></td>
             </tr>
         </table>
-        <button onclick="logout()">Logout</button>
+        <button class="logout-button" onclick="logout()">Logout</button>
     </div>
     
+    <!-- Toast thông báo -->
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        function switchLang() {
-            document.querySelector('.lang-switch').textContent = "🇻🇳 Tiếng Việt";
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            const passwordFieldType = passwordField.type;
+            passwordField.type = passwordFieldType === 'password' ? 'text' : 'password';
         }
-        
+
+        // Đảm bảo ẩn content khi chưa đăng nhập
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem('loggedIn') !== 'true') {
+                document.getElementById('content-box').classList.add('hidden');
+                document.getElementById('login-box').classList.remove('hidden');
+            } else {
+                document.getElementById('content-box').classList.remove('hidden');
+                document.getElementById('login-box').classList.add('hidden');
+                // Change background after login
+                document.body.style.background = 'url("https://i.imgur.com/bhiplWD.jpeg") no-repeat center center fixed';
+                document.body.style.backgroundSize = 'cover';
+            }
+        });
+
+        // Chức năng đăng nhập
         function login() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -158,24 +248,34 @@
                 document.getElementById('error').style.display = 'block';
             }
         }
-        
+
+        // Chức năng đăng xuất
         function logout() {
             localStorage.removeItem('loggedIn');
             document.getElementById('content-box').classList.add('hidden');
             document.getElementById('login-box').classList.remove('hidden');
+            // Revert the background to login background
+            document.body.style.background = 'url("https://i.imgur.com/7syXYAp.jpeg") no-repeat center center fixed';
+            document.body.style.backgroundSize = 'cover';
         }
-        
+
+        // Hiển thị nội dung sau khi đăng nhập
         function showContent() {
             document.getElementById('login-box').classList.add('hidden');
             document.getElementById('content-box').classList.remove('hidden');
+            // Change background after login
+            document.body.style.background = 'url("https://i.imgur.com/bhiplWD.jpeg") no-repeat center center fixed';
+            document.body.style.backgroundSize = 'cover';
         }
-        
+
+        // Chức năng sao chép
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`Copied: ${text}`);
             });
         }
-        
+
+        // Hiển thị thông báo Toast
         function showToast(message) {
             const toastContainer = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -186,10 +286,6 @@
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 500);
             }, 5000);
-        }
-        
-        if (localStorage.getItem('loggedIn') === 'true') {
-            showContent();
         }
     </script>
 </body>

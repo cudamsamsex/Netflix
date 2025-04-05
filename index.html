@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Netflix Account Share</title>
-        <!-- Thêm favicon -->
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Account Share</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
         /* Your existing styles */
         body {
             font-family: 'Roboto', sans-serif;
@@ -135,36 +134,31 @@
             }
         }
 
-        /* Ẩn phần content khi chưa đăng nhập */
         .hidden {
             display: none;
         }
 
-        /* Resize the logout button */
         .logout-button {
             padding: 10px 20px;
             font-size: 14px;
-            width: auto;
             cursor: pointer;
         }
 
-        /* Style for the eye icon */
         .eye-icon {
             cursor: pointer;
             position: absolute;
-            right: 35px;  /* Adjusted right position to avoid overlapping */
-            top: 50%;  /* Vertically center the icon */
-            transform: translateY(-50%);  /* Fine-tune centering */
+            right: 35px;
+            top: 50%;
+            transform: translateY(-50%);
             color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Khung đăng nhập -->
+    <!-- Login Box -->
     <div class="login-container" id="login-box">
-        <img src="https://i.pinimg.com/originals/d2/a8/47/d2a84760f77dfe1ab7903615f4523a71.gif" alt="User Avatar" class="user-image"> <!-- Ảnh người dùng -->
-        <h2>Login Account:
-        </h2>
+        <img src="https://i.pinimg.com/originals/d2/a8/47/d2a84760f77dfe1ab7903615f4523a71.gif" alt="User Avatar" class="user-image">
+        <h2>Login Account:</h2>
         <input type="text" id="username" placeholder="Username"><br>
         <div style="position: relative;">
             <input type="password" id="password" placeholder="Password"><br>
@@ -173,8 +167,8 @@
         <button onclick="login()">Login</button>
         <p id="error" style="color: red; display: none;">Incorrect username or password!</p>
     </div>
-    
-    <!-- Nội dung Netflix Account Share, sẽ ẩn cho đến khi đăng nhập -->
+
+    <!-- Netflix Account Content -->
     <div class="content-container hidden" id="content-box">
         <h2>Netflix Account Share</h2>
         <table>
@@ -183,111 +177,83 @@
                 <th>Password</th>
             </tr>
             <tr>
-                <td>lifexyz2468@gmail.com <button class="copy-btn" onclick="copyText('lifexyz2468@gmail.com')">📋</button></td>
-                <td>25542409 <button class="copy-btn" onclick="copyText('25542409')">📋</button></td>
+                <td id="account-email">-</td>
+                <td id="account-password">-</td>
             </tr>
             <tr>
                 <th>Profile</th>
                 <th>PIN</th>
             </tr>
-            <tr>
-                <td>Profile 1</td>
-                <td>1111 <button class="copy-btn" onclick="copyText('1111')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 2</td>
-                <td>0202 <button class="copy-btn" onclick="copyText('0202')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 3</td>
-                <td>1357 <button class="copy-btn" onclick="copyText('1357')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 4</td>
-                <td>4488 <button class="copy-btn" onclick="copyText('4488')">📋</button></td>
-            </tr>
-            <tr>
-                <td>Profile 5</td>
-                <td>0055 <button class="copy-btn" onclick="copyText('0055')">📋</button></td>
-            </tr>
+            <tbody id="profiles-table">
+                <!-- Profile rows will be added dynamically -->
+            </tbody>
         </table>
         <button class="logout-button" onclick="logout()">Logout</button>
     </div>
-    
-    <!-- Toast thông báo -->
+
+    <!-- Toast Notifications -->
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        // Toggle password visibility
         function togglePasswordVisibility() {
             const passwordField = document.getElementById('password');
             const passwordFieldType = passwordField.type;
             passwordField.type = passwordFieldType === 'password' ? 'text' : 'password';
         }
 
-        // Đảm bảo ẩn content khi chưa đăng nhập
         document.addEventListener("DOMContentLoaded", function() {
             if (localStorage.getItem('loggedIn') !== 'true') {
                 document.getElementById('content-box').classList.add('hidden');
                 document.getElementById('login-box').classList.remove('hidden');
             } else {
-                document.getElementById('content-box').classList.remove('hidden');
-                document.getElementById('login-box').classList.add('hidden');
-                // Change background after login
-                document.body.style.background = 'url("https://i.imgur.com/bhiplWD.jpeg") no-repeat center center fixed';
-                document.body.style.backgroundSize = 'cover';
+                showContent();
             }
         });
 
-        // Chức năng đăng nhập
-        function login() {
+        async function login() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
-            if (user === 'nadeptrai' && pass === 'nadeptrai') {
+
+            // Call backend API for login
+            const res = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username: user, password: pass }),
+            });
+
+            const data = await res.json();
+
+            if (res.status === 200) {
                 localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('netflixAccount', JSON.stringify(data));
                 showContent();
             } else {
                 document.getElementById('error').style.display = 'block';
             }
         }
 
-        // Chức năng đăng xuất
+        function showContent() {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('content-box').classList.remove('hidden');
+            
+            const account = JSON.parse(localStorage.getItem('netflixAccount'));
+            document.getElementById('account-email').textContent = account.username;
+            document.getElementById('account-password').textContent = account.password;
+
+            const profilesTable = document.getElementById('profiles-table');
+            account.profiles.forEach(profile => {
+                const row = profilesTable.insertRow();
+                row.insertCell(0).textContent = profile.name;
+                row.insertCell(1).textContent = profile.password;
+            });
+        }
+
         function logout() {
             localStorage.removeItem('loggedIn');
             document.getElementById('content-box').classList.add('hidden');
             document.getElementById('login-box').classList.remove('hidden');
-            // Revert the background to login background
-            document.body.style.background = 'url("https://i.imgur.com/7syXYAp.jpeg") no-repeat center center fixed';
-            document.body.style.backgroundSize = 'cover';
-        }
-
-        // Hiển thị nội dung sau khi đăng nhập
-        function showContent() {
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('content-box').classList.remove('hidden');
-            // Change background after login
-            document.body.style.background = 'url("https://i.imgur.com/bhiplWD.jpeg") no-repeat center center fixed';
-            document.body.style.backgroundSize = 'cover';
-        }
-
-        // Chức năng sao chép
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(`Copied: ${text}`);
-            });
-        }
-
-        // Hiển thị thông báo Toast
-        function showToast(message) {
-            const toastContainer = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast show';
-            toast.textContent = message;
-            toastContainer.prepend(toast);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 500);
-            }, 5000);
         }
     </script>
 </body>
